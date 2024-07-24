@@ -45,11 +45,11 @@ type Message struct {
 func FormatRequest(index, begin, length int) *Message {
 	payload := make([]byte, 12)
 
-	binary.BigEndian.AppendUint32(payload[0:4], uint32(index))
-	binary.BigEndian.AppendUint32(payload[4:8], uint32(begin))
-	binary.BigEndian.AppendUint32(payload[8:12], uint32(length))
+	binary.BigEndian.PutUint32(payload[0:4], uint32(index))
+	binary.BigEndian.PutUint32(payload[4:8], uint32(begin))
+	binary.BigEndian.PutUint32(payload[8:12], uint32(length))
 
-	return &Message{ID: MsgHave, PayLoad: payload}
+	return &Message{ID: MsgRequest, PayLoad: payload}
 }
 
 func FormatHave(index int) *Message {
