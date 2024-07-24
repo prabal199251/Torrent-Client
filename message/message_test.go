@@ -18,3 +18,12 @@ func TestFormatRequest(t *testing.T) {
 	}
 	assert.Equal(t, expected, msg)
 }
+
+func TestFormatHave(t *testing.T) {
+	msg := FormatHave(4)
+	expected := &Message{
+		ID:      MsgHave,
+		PayLoad: []byte{0x00, 0x00, 0x00, 0x04},
+	}
+	assert.Equal(t, expected, msg)
+}
