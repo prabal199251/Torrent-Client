@@ -1,6 +1,7 @@
 package message
 
 import (
+	"bytes"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -208,3 +209,47 @@ func TestSerialize(t *testing.T) {
 	}
 }
 
+func TestRead(t *testing.T) {
+	tests := map[string]struct {
+		input  []byte
+		output *Message
+		fails  bool
+	}{
+		"parse normal message to struct": {
+			input:  []byte{0, 0, 0, 5, 4, 1, 2, 3, 4},
+			output: &Message{ID: MsgHave, PayLoad: []byte{1, 2, 3, 4}},
+			fails:  false,
+		},
+
+		"parse keep-alive into nil": {
+			input:  []byte{0, 0, 0, 0},
+			output: nil,
+			fails:  false,
+		},
+
+		"length too short": {
+			input:  []byte{0, 0, 5},
+			output: nil,
+			fails:  true,
+		},
+
+		"length too long": {
+			input:  []byte{0, 0, 0, 5, 4},
+			output: nil,
+			fails:  true,
+		},
+	}
+
+	for _, test := range tests {
+		reader := bytes.NewReader(test.input)
+		m, err := Read(reader)
+
+		if test.fails {
+			assert.NotNil(t, err)
+		} else {
+			assert.Nil(t, err)
+		}
+
+		assert.Equal(t, test.output, m)
+	}
+}
