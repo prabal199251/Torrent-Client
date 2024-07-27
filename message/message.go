@@ -157,6 +157,8 @@ func (m *Message) name() string {
 	}
 
 	switch m.ID {
+	case MsgChoke:
+		return "Choke"
 	case MsgUnchoke:
 		return "Unchoke"
 	case MsgInterested:
