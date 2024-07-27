@@ -131,7 +131,7 @@ func TestParsePiece(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		n ,err := ParsePiece(test.inputIndex, test.inputBuf, test.inputMsg)
+		n, err := ParsePiece(test.inputIndex, test.inputBuf, test.inputMsg)
 
 		if test.fails {
 			assert.NotNil(t, err)
@@ -141,37 +141,37 @@ func TestParsePiece(t *testing.T) {
 
 		assert.Equal(t, test.outputBuf, test.inputBuf)
 		assert.Equal(t, test.outputN, n)
-	}	
+	}
 }
 
 func TestParseHave(t *testing.T) {
 	tests := map[string]struct {
-		input	*Message
-		output 	int
-		fails	bool
+		input  *Message
+		output int
+		fails  bool
 	}{
 		"parse valid message": {
-			input: &Message{ID: MsgHave, PayLoad: []byte{0x00, 0x00, 0x00, 0x04}},
+			input:  &Message{ID: MsgHave, PayLoad: []byte{0x00, 0x00, 0x00, 0x04}},
 			output: 4,
-			fails: false,
+			fails:  false,
 		},
 
 		"wrong message type": {
-			input: &Message{ID: MsgPiece, PayLoad: []byte{0x00, 0x00, 0x00, 0x04}},
+			input:  &Message{ID: MsgPiece, PayLoad: []byte{0x00, 0x00, 0x00, 0x04}},
 			output: 0,
-			fails: true,
+			fails:  true,
 		},
 
 		"payload too short": {
-			input: &Message{ID: MsgHave, PayLoad: []byte{0x00, 0x00, 0x04}},
+			input:  &Message{ID: MsgHave, PayLoad: []byte{0x00, 0x00, 0x04}},
 			output: 0,
-			fails: true,
+			fails:  true,
 		},
 
 		"payload too long": {
-			input: &Message{ID: MsgHave, PayLoad: []byte{0x00, 0x00, 0x00, 0x00, 0x04}},
+			input:  &Message{ID: MsgHave, PayLoad: []byte{0x00, 0x00, 0x00, 0x00, 0x04}},
 			output: 0,
-			fails: true,
+			fails:  true,
 		},
 	}
 
@@ -186,3 +186,25 @@ func TestParseHave(t *testing.T) {
 		assert.Equal(t, test.output, index)
 	}
 }
+
+func TestSerialize(t *testing.T) {
+	tests := map[string]struct {
+		input  *Message
+		output []byte
+	}{
+		"serialize valid message": {
+			input:  &Message{ID: MsgHave, PayLoad: []byte{1, 2, 3, 4}},
+			output: []byte{0, 0, 0, 5, 4, 1, 2, 3, 4},
+		},
+		"serialize keep-alive": {
+			input:  nil,
+			output: []byte{0, 0, 0, 0},
+		},
+	}
+
+	for _, test := range tests {
+		buf := test.input.Serialize()
+		assert.Equal(t, test.output, buf)
+	}
+}
+
