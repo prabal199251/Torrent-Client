@@ -4,6 +4,8 @@ import (
 	"net"
 	"testing"
 
+	"github.com/prabal199251/Torrent-Client/bitfield"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -42,3 +44,41 @@ func TestClientServerConnection(t *testing.T) {
 	require.Equal(t, testMessage, buf)
 }
 
+func TestRecvBitfield(t *testing.T) {
+	tests := map[string]struct {
+		msg    []byte
+		output bitfield.Bitfield
+		fails  bool
+	}{
+		"successful bitfield" : {
+			msg : []byte{0x00, 0x00, 0x00, 0x06, 5, 1, 2, 3, 4, 5},
+			output: bitfield.Bitfield{1, 2, 3, 4, 5},
+			fails: false,
+		},
+
+		"message is not a bitfield": {
+			msg:    []byte{0x00, 0x00, 0x00, 0x06, 99, 1, 2, 3, 4, 5},
+			output: nil,
+			fails:  true,
+		},
+		"message is keep-alive": {
+			msg:    []byte{0x00, 0x00, 0x00, 0x00},
+			output: nil,
+			fails:  true,
+		},
+	}
+
+	for _, test := range tests {
+		clientConn, serverConn := createClientAndServer(t)
+		serverConn.Write(test.msg)
+
+		bf, err := recvBitfiled(clientConn)
+
+		if test.fails {
+			assert.NotNil(t, err)
+		} else {
+			assert.Nil(t, err)
+			assert.Equal(t, bf, test.output)
+		}
+	}
+}
