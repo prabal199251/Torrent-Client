@@ -6,6 +6,7 @@ import (
 
 	"github.com/prabal199251/Torrent-Client/bitfield"
 	"github.com/prabal199251/Torrent-Client/handshake"
+	"github.com/prabal199251/Torrent-Client/message"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -126,4 +127,29 @@ func TestCompleteHandshake(t *testing.T) {
 			assert.Equal(t, h, test.output)
 		}
 	}
+}
+
+func TestRead(t *testing.T) {
+	clientConn, serverConn := createClientAndServer(t)
+
+	client := Client{Conn: clientConn}
+
+	msgBytes := []byte{
+		0x00, 0x00, 0x00, 0x05,
+		4,
+		0x00, 0x00, 0x05, 0x3c,
+	}
+
+	expected := &message.Message{
+		ID:      message.MsgHave,
+		PayLoad: []byte{0x00, 0x00, 0x05, 0x3c},
+	}
+
+	_, err := serverConn.Write(msgBytes)
+	require.Nil(t, err)
+
+	msg, err := client.Read()
+	require.Nil(t, err)
+
+	assert.Equal(t, msg, expected)
 }
