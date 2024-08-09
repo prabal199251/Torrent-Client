@@ -7,20 +7,20 @@ A BitTorrent client implemented in Golang. This project demonstrates a basic tor
 Torrent-Client  
 │    
 ├─ bitfield  
-│   ` ` ` ` ` `└─ `bitfield.go`  
+│   ` `└─ `bitfield.go`  
 ├─ client  
-│   ` ` ` ` ` `└─ `client.go`  
+│   ` `└─ `client.go`  
 ├─ handshake  
-│  ` ` ` ` ` ` └─ `handshake.go`    
+│   ` `└─ `handshake.go`    
 ├─ message  
-│   ` ` ` ` ` `└─ `message.go`  
+│   ` `└─ `message.go`  
 ├─ p2p  
-│   ` ` ` ` ` `└─ `p2p.go`  
+│   ` `└─ `p2p.go`  
 ├─ peers  
-│   ` ` ` ` ` `└─ `peers.go`  
+│   ` `└─ `peers.go`  
 ├─ torrentFile  
-│  ` ` ` ` ` ` ├─ `torrentFile.go`  
-│  ` ` ` ` ` ` └─ `tracker.go`  
+│   ` `├─ `torrentFile.go`  
+│   ` `└─ `tracker.go`  
 └─ `main.go`
 
 ## Installation
