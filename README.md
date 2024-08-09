@@ -2,27 +2,6 @@
 
 A BitTorrent client implemented in Golang. This project demonstrates a basic torrent downloader with core BitTorrent protocol functionalities, including tracker communication, peer-to-peer data transfer, and piece management.
 
-## Project Structure
-
-Torrent-Client  
-│    
-├─ bitfield  
-│   ` `└─ `bitfield.go`  
-├─ client  
-│   ` `└─ `client.go`  
-├─ handshake  
-│   ` `└─ `handshake.go`    
-├─ message  
-│   ` `└─ `message.go`  
-├─ p2p  
-│   ` `└─ `p2p.go`  
-├─ peers  
-│   ` `└─ `peers.go`  
-├─ torrentFile  
-│   ` `├─ `torrentFile.go`  
-│   ` `└─ `tracker.go`  
-└─ `main.go`
-
 ## Installation
 
 #### (Method-1)
