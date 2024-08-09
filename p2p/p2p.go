@@ -175,7 +175,7 @@ func (t *Torrent) startDownloadWorker(peer peers.Peer, workQueue chan *PieceWork
 
 func (t *Torrent) calculateBoundsForPiece(index int) (begin int, end int) {
 	begin = index * t.PieceLength
-	end = begin * t.PieceLength
+	end = begin + t.PieceLength
 
 	if end > t.Length {
 		end = t.Length
